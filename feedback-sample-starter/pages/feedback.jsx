@@ -9,15 +9,6 @@ import FeedbackItem from "./components/FeedbackItem";
 export default function FeedbackPage() {
   const [feedbacks, setFeedbacks] = useState([]);
 
-  useEffect(() => {
-    const url = "http://localhost:4000/feedbacks";
-    fetch(url)
-      .then((x) => x.json())
-      .then((a) => {
-        setFeedbacks(a);
-      });
-  }, []);
-
   return (
     <div className={styles.container}>
       <Head>
@@ -30,9 +21,6 @@ export default function FeedbackPage() {
         <FeedbackForm />
         <Button variants="primary">button</Button>
         <Button variants="secondary">button</Button>
-        {feedbacks.map((item) => (
-          <FeedbackItem item={item} />
-        ))}
       </main>
     </div>
   );
