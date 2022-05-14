@@ -3,8 +3,8 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import Card from "./components/Card";
-import Button from "./components/Button";
+import Card from "../components/Card";
+import Button from "../components/Button";
 
 //React routing 처리 - react-router
 // next.js

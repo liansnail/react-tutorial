@@ -2,22 +2,25 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { useState, useEffect } from "react";
-import Button from "./components/Button";
-import FeedbackForm from "./components/FeedbackForm";
-import FeedbackItem from "./components/FeedbackItem";
-import axios from "axios";
+import Button from "../components/Button";
+import FeedbackForm from "../components/FeedbackForm";
+import FeedbackItem from "../components/FeedbackItem";
+// import axios from "axios";
+import feedbackApi from "../api/feedbackApi";
+// frame-motion, react-spring
+import { AnimatePresence } from "framer-motion";
 
 export default function FeedbackPage() {
   const [feedbacks, setFeedbacks] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    //Promise
-    axios.get("http://localhost:4000/feedbacks").then((x) => setFeedbacks(x.data));
-    // cleanup unmount 처리
-    return () => {
-        console.log('unmount')
-    }
-
+    setLoading(true);
+    //구조 분할로 data가져와서 setFeedbacks에 전달
+    feedbackApi.getFeedbacks().then(({ data }) => {
+      setFeedbacks(data);
+      setLoading(false);
+    })
   }, []);
 
   return (
@@ -29,12 +32,22 @@ export default function FeedbackPage() {
       </Head>
 
       <main className="container">
-        <FeedbackForm />
+        <FeedbackForm setFeedbacks={setFeedbacks} />
         <Button variants="primary">button</Button>
         <Button variants="secondary">button</Button>
-        {feedbacks.map((item) => (
-          <FeedbackItem item={item} />
-        ))}
+        {loading ? (
+          <p>로딩 중 ...</p>
+        ) : (
+          <AnimatePresence>
+            {feedbacks.map((item) => (
+              <FeedbackItem
+                key={item.id}
+                item={item}
+                setFeedbacks={setFeedbacks}
+              />
+            ))}
+          </AnimatePresence>
+        )}
       </main>
     </div>
   );
